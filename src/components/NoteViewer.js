@@ -5,7 +5,11 @@ function NoteViewer({ note, onSave, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
 
   if (!note) {
-    return <p>Selecciona una nota para ver su contenido</p>;
+    return( 
+    <div className="message-viewer">
+    <h3>Selecciona una nota para ver su contenido</h3>
+    </div>
+    );
   }
 
   return (

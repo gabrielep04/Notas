@@ -43,6 +43,11 @@ body {
   flex-direction: column;
 }
 
+.message-viewer{
+  margin-left: 360px;
+  margin-top: 300px;
+}
+
 .note-viewer h2 {
   margin-top: 0;
 }
