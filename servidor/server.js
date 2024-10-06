@@ -20,6 +20,8 @@ const pool = new Pool({
   port: 5432,
 });
 
+const SECRET_KEY = 'secreto';
+
 // Ruta de login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -28,13 +30,38 @@ app.post('/login', async (req, res) => {
     const result = await pool.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
 
     if (result.rows.length > 0) {
-      const token = jwt.sign({ username }, 'secret_key', { expiresIn: '1h' });
+      const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
       res.json({ token });
     } else {
       res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
     }
   } catch (error) {
     res.status(500).json({ message: 'Error en el servidor' });
+  }
+});
+
+//Ruta de registro
+app.post('/register', async (req, res) => {
+  const { username, password, confirmPassword } = req.body;
+
+  // Verificar si las contraseñas coinciden
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: 'Las contraseñas no coinciden' });
+  }
+
+  try {
+    const userExists = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+
+    if (userExists.rows.length > 0) {
+      return res.status(400).json({ message: 'El nombre de usuario ya existe' });
+    }
+
+    await pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, password]);
+
+    res.status(201).json({ message: 'Usuario registrado exitosamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al registrar el usuario' });
   }
 });
 

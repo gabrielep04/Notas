@@ -1,0 +1,14 @@
+.list-group-item.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  
+  .list-group-item {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  

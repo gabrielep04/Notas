@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './LoginForm.css'; // Importa el CSS
+import './LoginForm.css';
 
-const LoginForm = ({ onLoginSuccess }) => {
+const LoginForm = ({ onLoginSuccess, onToggleRegister }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
@@ -17,6 +17,7 @@ const LoginForm = ({ onLoginSuccess }) => {
     .then(response => response.json())
     .then(data => {
       if (data.token) {
+        localStorage.setItem("token", data.token); //Guarda el token en la memoria local
         onLoginSuccess(); // Llama a la función de éxito de login
         setErrorMessage(''); // Limpia el mensaje de error
       } else {
@@ -55,6 +56,7 @@ const LoginForm = ({ onLoginSuccess }) => {
         </div>
         {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Mostrar el mensaje de error */}
         <button type="submit">Login</button>
+        <p>¿No tienes una cuenta?<button type='button' onClick={onToggleRegister}>Regístrate</button></p>
       </form>
     </div>
   );
