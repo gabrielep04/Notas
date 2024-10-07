@@ -11,6 +11,25 @@ const port = 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
+function authenticateToken(req, res, next) {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, SECRET_KEY, async (err, decoded) => {
+    if (err) return res.sendStatus(403);
+
+    try {
+      const userResult = await pool.query('SELECT id FROM users WHERE username = $1', [decoded.username]);
+      if (userResult.rows.length === 0) return res.sendStatus(403);
+
+      req.user = { id: userResult.rows[0].id };
+      next();
+    } catch (error) {
+      return res.sendStatus(500);
+    }
+  });
+}
+
 // Conexión a la base de datos PostgreSQL
 const pool = new Pool({
   user: 'postgres',
@@ -62,6 +81,79 @@ app.post('/register', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al registrar el usuario' });
+  }
+});
+
+//Obtener notas de un usuario
+app.get('/notes', authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const result = await pool.query('SELECT * FROM notes WHERE user_id = $1', [userId]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener las notas' });
+  }
+});
+
+//Agregrar nota a base de datos
+app.post('/notes', authenticateToken, async (req, res) => {
+  const { title, content } = req.body;
+  const userId = req.user.id;
+  
+  try {
+    const newNote = await pool.query(
+      'INSERT INTO notes (title, content, user_id, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) RETURNING *',
+      [title, content, userId]
+    );
+    res.json(newNote.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al crear la nota' });
+  }
+});
+
+//Eliminar una nota
+app.delete('/notes/:id', authenticateToken, async (req, res) => {
+  const noteId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM notes WHERE id = $1 AND user_id = $2 RETURNING *',
+      [noteId, userId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Nota no encontrada o no tienes permiso para eliminarla' });
+    }
+
+    res.status(200).json({ message: 'Nota eliminada exitosamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al eliminar la nota' });
+  }
+});
+
+//Actualizar nota
+app.put('/notes/:id', authenticateToken, async (req, res) => {
+  const { title, content } = req.body;
+  const noteId = req.params.id;
+  const userId = req.user.id;
+  
+  try {
+    const updatedNote = await pool.query(
+      'UPDATE notes SET title = $1, content = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 AND user_id = $4 RETURNING *',
+      [title, content, noteId, userId]
+    );
+    
+    if (updatedNote.rows.length === 0) {
+      return res.status(404).json({ error: 'Nota no encontrada' });
+    }
+
+    res.json(updatedNote.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar la nota' });
   }
 });
 

@@ -12,24 +12,62 @@ function App() {
   const [isRegistering, setIsRegistering] = useState(false); //Estado de registro
 
   // Función para agregar una nota
-  const addNote = (note) => {
-    setNotes([...notes, { ...note, id: Date.now() }]);
+  const addNote = async (note) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://localhost:5000/notes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(note),
+    });
+    const newNote = await response.json();
+    setNotes([...notes, newNote]);
+    setActiveNote(newNote);
   };
 
   // Función para eliminar una nota
-  const deleteNote = (id) => {
+  const deleteNote = async (id) => {
+    const token = localStorage.getItem('token');
+    await fetch(`http://localhost:5000/notes/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setNotes(notes.filter((note) => note.id !== id));
     setActiveNote(null); // Si borramos la nota activa, deseleccionarla
   };
 
   // Función para actualizar una nota
-  const updateNote = (updatedNote) => {
-    setNotes(notes.map((note) => (note.id === updatedNote.id ? updatedNote : note)));
+  const updateNote = async (updatedNote) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:5000/notes/${updatedNote.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedNote),
+    });
+    const updated = await response.json();
+    setNotes(notes.map((note) => (note.id === updated.id ? updated : note)));
+    setActiveNote(updated);
   };
 
     // Manejar autenticación
-    const handleLoginSuccess = () => {
+    const handleLoginSuccess = async () => {
       setIsAuthenticated(true); // Cambia el estado a autenticado
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/notes', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const fetchedNotes = await response.json();
+      setNotes(fetchedNotes);
+      setActiveNote(null);
     };
 
     //Manejar registro de usuario
@@ -42,12 +80,15 @@ function App() {
       const token = localStorage.getItem("token")
       if (token) {
         setIsAuthenticated(true);
+        handleLoginSuccess();
       }
     }, []);
 
     const handleLogout = () => {
       localStorage.removeItem("token");
       setIsAuthenticated(false);
+      setNotes([]);
+      setActiveNote(null);
     };
 
   return (
@@ -56,7 +97,7 @@ function App() {
       {isAuthenticated ? (
         <>
           <button onClick={handleLogout}>Logout</button>
-          <Sidebar notes={notes} onSelectNote={setActiveNote} onAddNote={addNote} />
+          <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onAddNote={addNote} />
           <NoteViewer note={activeNote} onSave={updateNote} onDelete={deleteNote} />
         </>
       ) : (
