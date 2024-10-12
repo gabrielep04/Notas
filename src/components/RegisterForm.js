@@ -6,11 +6,20 @@ const RegisterForm = ({ onRegisterSuccess, onToggleRegister }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleRegister = (username, password, confirmPassword) => {
+    // Verificar que los campos no estén vacíos
+    if (!username || !password || !confirmPassword) {
+      setErrorMessage('Todos los campos son obligatorios');
+      setSuccessMessage(''); // Limpiar cualquier mensaje de éxito previo
+      return;
+    }
+
     // Verificar que las contraseñas coincidan
     if (password !== confirmPassword) {
       setErrorMessage('Las contraseñas no coinciden');
+      setSuccessMessage(''); // Limpiar cualquier mensaje de éxito previo
       return;
     }
 
@@ -19,19 +28,23 @@ const RegisterForm = ({ onRegisterSuccess, onToggleRegister }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password, confirmPassword }),
     })
       .then(response => response.json())
       .then(data => {
-        if (data.success) {
-          onRegisterSuccess(); // Registro exitoso
+        if (data.message === "Usuario registrado exitosamente") {
+          setErrorMessage(''); 
+          setSuccessMessage("Registro exitoso"); 
+          onRegisterSuccess();
         } else {
           setErrorMessage(data.message || 'Error en el registro');
+          setSuccessMessage('');
         }
       })
       .catch(error => {
         console.error('Error:', error);
         setErrorMessage('Error en la conexión');
+        setSuccessMessage(''); 
       });
   };
 
@@ -67,7 +80,10 @@ const RegisterForm = ({ onRegisterSuccess, onToggleRegister }) => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-        {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Mostrar el mensaje de error */}
+        {/* Mostrar mensajes de error o éxito */}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {successMessage && <div className="success-message">{successMessage}</div>}
+        
         <button type="submit">Registrarse</button>
         <button type="button" onClick={onToggleRegister}>¿Ya tienes una cuenta? Inicia sesión</button>
       </form>

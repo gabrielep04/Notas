@@ -71,6 +71,10 @@ function App() {
     };
 
     //Manejar registro de usuario
+    const handleRegisterSuccess = () => {
+      setIsRegistering(false);
+    }
+    
     const handleToggleRegister = () => {
       setIsRegistering(!isRegistering);
     }
@@ -97,13 +101,13 @@ function App() {
       {isAuthenticated ? (
         <>
           <button onClick={handleLogout}>Logout</button>
-          <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onAddNote={addNote} />
+          <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onAddNote={addNote} onDeleteNote={deleteNote} />
           <NoteViewer note={activeNote} onSave={updateNote} onDelete={deleteNote} />
         </>
       ) : (
         // Si no está autenticado, mostramos la pantalla de login o registro
         isRegistering ? (
-          <RegisterForm onToggleRegister={handleToggleRegister} onRegisterSuccess={() => setIsRegistering(false)} />
+          <RegisterForm onToggleRegister={handleToggleRegister} onRegisterSuccess={handleRegisterSuccess} />
         ) : (
           <LoginForm onLoginSuccess={handleLoginSuccess} onToggleRegister={handleToggleRegister} />
         )

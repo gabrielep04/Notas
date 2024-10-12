@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css'; 
+import { FaTrashAlt } from 'react-icons/fa';
 
-function Sidebar({ notes, activeNote, onSelectNote, onAddNote }) {
-  const [selectedIndex, setSelectedIndex] = useState(null);
+function Sidebar({ notes, activeNote, onSelectNote, onAddNote, onDeleteNote }) {
+  const [hoveredIndex, setHoveredIndex] = useState(null); 
 
   useEffect(() => {
-    if (activeNote) {
-      const index = notes.findIndex(note => note.id === activeNote.id);
-      setSelectedIndex(index); // Actualiza el índice seleccionado si cambia la nota activa
-    }
-  }, [activeNote, notes]);
+    setHoveredIndex(null);
+  }, [activeNote]);
 
   const formatRelativeDate = (date) => {
     const now = new Date();
@@ -26,7 +24,6 @@ function Sidebar({ notes, activeNote, onSelectNote, onAddNote }) {
     } else if (diffDays <= 5) {
       return `${diffDays} días`;
     } else {
-      // Mostrar la fecha completa si han pasado más de 5 días
       return updatedDate.toLocaleDateString('es-ES', {
         year: 'numeric',
         month: '2-digit',
@@ -35,28 +32,40 @@ function Sidebar({ notes, activeNote, onSelectNote, onAddNote }) {
     }
   };
 
+  const sortedNotes = [...notes].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
   return (
     <div className="sidebar">
       <h2>Notas</h2>
       <button onClick={() => {
         const newNote = { title: '', content: '' };
         onAddNote(newNote);
-        setSelectedIndex(notes.length); // Establece el índice para la nueva nota
       }}>
         Nueva Nota
       </button>
-      <ul>
-        {notes.map((note, index) => (
+      <ul className="notes-list">
+        {sortedNotes.map((note, index) => (
           <li 
             key={note.id} 
-            className={selectedIndex === index ? "list-group-item active" : "list-group-item"}
-            onClick={() => {
-              onSelectNote(note);
-              setSelectedIndex(index); // Actualizar el índice seleccionado
-            }}
+            className={activeNote && activeNote.id === note.id ? "list-group-item active" : "list-group-item"}
+            onMouseEnter={() => setHoveredIndex(index)} 
+            onMouseLeave={() => setHoveredIndex(null)}  
+            onClick={() => onSelectNote(note)} 
           >
-            <div>{note.title || 'Sin título'}</div>
-            <div className="note-date">{formatRelativeDate(note.updated_at)}</div> {/* Fecha formateada */}
+            <div className="note-content">
+              <div>{note.title || 'Sin título'}</div>
+              <div className="note-date">{formatRelativeDate(note.updated_at)}</div>
+            </div>
+
+            {hoveredIndex === index && (
+              <FaTrashAlt 
+                className="trash-icon" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteNote(note.id);
+                }} 
+              />
+            )}
           </li>
         ))}
       </ul>
