@@ -7,32 +7,6 @@
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
-.sidebar h2 {
-  position: sticky; 
-  background-color: #f8f9fa;
-  top: 0;
-  padding: 10px 0;
-  z-index: 1;
-  border-top-right-radius: 8px;
-  border-top-left-radius: 8px;
-  padding-left: 10px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-}
-
-.sidebar h2::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -30px; /* Extiende hacia abajo */
-  height: 30px;  /* Ajusta la altura de la extensión */
-  background-color: #f8f9fa;
-  z-index: 0;   /* Para que el pseudo-elemento esté detrás del contenido */
-  box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.1);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
 .sidebar button {
   position: sticky; 
   top: 40px; 

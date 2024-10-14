@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import "./NoteViewer.css";
+import { FaTrashAlt } from 'react-icons/fa';
 
 function NoteViewer({ note, onSave, onDelete }) {
   const [currentNote, setCurrentNote] = useState(note || { title: '', content: '', updated_at: new Date() });
@@ -14,6 +16,12 @@ function NoteViewer({ note, onSave, onDelete }) {
     const updatedNote = { ...currentNote, [field]: value, updated_at: new Date() };
     setCurrentNote(updatedNote);
     onSave(updatedNote);
+
+    if(updatedNote.title.trim() === "" && updatedNote.content.trim() === "") {
+      onDelete(updatedNote.id);
+    } else {
+      onSave(updatedNote);
+    }
   };
 
   const formatDate = (date) => {
@@ -37,18 +45,27 @@ function NoteViewer({ note, onSave, onDelete }) {
   return (
     <div className="note-viewer">
       <input
+        className="note-title"
         type="text"
         value={currentNote.title}
         onChange={(e) => handleContentChange('title', e.target.value)}
         placeholder="Escribe el título aquí"
+        maxLength={240}
       />
       <textarea
+      className="note-content"
         value={currentNote.content}
         onChange={(e) => handleContentChange('content', e.target.value)}
         placeholder="Escribe la nota aquí"
+        maxLength={50000}
       />
-      <p>Última modificación: {formatDate(currentNote.updated_at)}</p>
-      <button onClick={() => onDelete(note.id)}>Eliminar</button>
+      <div className="note-footer">
+        <p className="note-date">Última modificación: {formatDate(currentNote.updated_at)}</p>
+        <FaTrashAlt 
+          className="trash-icon-viewer" 
+          onClick={() => onDelete(note.id)}
+        />
+      </div>
     </div>
   );
 }

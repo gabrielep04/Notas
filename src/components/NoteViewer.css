@@ -1,0 +1,61 @@
+.note-viewer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+.note-viewer input[type="text"] {
+    border: none;
+    border-bottom: 2px solid #007bff;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 10px 5px;
+    width: 100%;
+    transition: border-color 0.3s ease;
+}
+  
+.note-viewer input[type="text"]:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+  
+.note-viewer textarea {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 15px 5px;
+    width: 100%;
+    height: calc(100vh - 200px); /* Ajustar la altura según el tamaño de la pantalla */
+    resize: none;
+    transition: border-color 0.3s ease;
+}
+  
+.note-viewer textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.note-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
+  
+.note-footer p {
+    font-size: 0.9em;
+    color: #888;
+    margin: 0;
+}
+
+.trash-icon-viewer {
+    font-size: 1.5em;
+    color: red;
+    cursor: pointer;
+}

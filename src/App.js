@@ -100,8 +100,7 @@ function App() {
       {/* Si el usuario está autenticado, mostramos la app de notas */}
       {isAuthenticated ? (
         <>
-          <button onClick={handleLogout}>Logout</button>
-          <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onAddNote={addNote} onDeleteNote={deleteNote} />
+          <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onAddNote={addNote} onDeleteNote={deleteNote} onLogout={handleLogout} />
           <NoteViewer note={activeNote} onSave={updateNote} onDelete={deleteNote} />
         </>
       ) : (

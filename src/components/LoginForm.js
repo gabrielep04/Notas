@@ -44,6 +44,7 @@ const LoginForm = ({ onLoginSuccess, onToggleRegister }) => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            maxLength={25}
           />
         </div>
         <div>
@@ -52,9 +53,10 @@ const LoginForm = ({ onLoginSuccess, onToggleRegister }) => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            maxLength={25}
           />
         </div>
-        {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Mostrar el mensaje de error */}
+        {errorMessage && <div className="error-message">{errorMessage}</div>} 
         <button type="submit">Login</button>
         <p>¿No tienes una cuenta?<button type='button' onClick={onToggleRegister}>Regístrate</button></p>
       </form>

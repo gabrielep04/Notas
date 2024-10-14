@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css'; 
 import { FaTrashAlt } from 'react-icons/fa';
+import Heading from "./Heading";
 
-function Sidebar({ notes, activeNote, onSelectNote, onAddNote, onDeleteNote }) {
+function Sidebar({ notes, activeNote, onSelectNote, onAddNote, onDeleteNote, onLogout }) {
   const [hoveredIndex, setHoveredIndex] = useState(null); 
 
   useEffect(() => {
@@ -32,17 +33,29 @@ function Sidebar({ notes, activeNote, onSelectNote, onAddNote, onDeleteNote }) {
     }
   };
 
+  const isNoteEmpty = (note) => {
+    return note.title.trim() === "" && note.content.trim() === "";
+  };
+
+  const handleSelectNote = (note) => {
+    if (activeNote && isNoteEmpty(activeNote)){
+      onDeleteNote(activeNote.id);
+    }
+    onSelectNote(note);
+  }
+
+  const truncateTitle = (title) => {
+    if (title.length > 15) {
+      return title.substring(0, 15) + "...";
+    }
+    return title;
+  }
+
   const sortedNotes = [...notes].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
   return (
     <div className="sidebar">
-      <h2>Notas</h2>
-      <button onClick={() => {
-        const newNote = { title: '', content: '' };
-        onAddNote(newNote);
-      }}>
-        Nueva Nota
-      </button>
+      <Heading onAddNote={onAddNote} onLogout={onLogout} />
       <ul className="notes-list">
         {sortedNotes.map((note, index) => (
           <li 
@@ -50,10 +63,10 @@ function Sidebar({ notes, activeNote, onSelectNote, onAddNote, onDeleteNote }) {
             className={activeNote && activeNote.id === note.id ? "list-group-item active" : "list-group-item"}
             onMouseEnter={() => setHoveredIndex(index)} 
             onMouseLeave={() => setHoveredIndex(null)}  
-            onClick={() => onSelectNote(note)} 
+            onClick={() => handleSelectNote(note)} 
           >
             <div className="note-content">
-              <div>{note.title || 'Sin título'}</div>
+              <div>{truncateTitle(note.title) || 'Sin título'}</div>
               <div className="note-date">{formatRelativeDate(note.updated_at)}</div>
             </div>
 

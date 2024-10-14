@@ -1,0 +1,97 @@
+.heading {
+    position: sticky; 
+    top: 0;
+    padding: 10px;
+    z-index: 2;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.heading-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.heading-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #343a40;
+}
+
+.heading .heading-logout-button {
+    background: none;
+    color: rgb(255, 103, 103);
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    padding: 5px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 100px;
+}
+
+.heading .heading-logout-button:hover {
+    color: white;
+    background-color: red;
+    border-radius: 4px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.heading .heading-mode-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100px;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.heading .heading-mode-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.heading .heading-add-button{
+    background: none; 
+    border: none; 
+    cursor: pointer;
+    font-size: 1.5rem; 
+    color: #000000; 
+    padding: 0; 
+    width: 30px; 
+    height: 30px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.heading .heading-add-button:hover{
+    color: #0056b3;
+}
+
+.icon {
+    z-index: 2;
+    font-size: 30px;
+    cursor: pointer; 
+}
+
+.dropdown-container {
+    display: flex;
+    align-items: center;
+}

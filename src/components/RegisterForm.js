@@ -62,6 +62,7 @@ const RegisterForm = ({ onRegisterSuccess, onToggleRegister }) => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            maxLength={25}
           />
         </div>
         <div>
@@ -70,6 +71,7 @@ const RegisterForm = ({ onRegisterSuccess, onToggleRegister }) => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            maxLength={25}
           />
         </div>
         <div>
@@ -78,9 +80,9 @@ const RegisterForm = ({ onRegisterSuccess, onToggleRegister }) => {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            maxLength={25}
           />
         </div>
-        {/* Mostrar mensajes de error o éxito */}
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         {successMessage && <div className="success-message">{successMessage}</div>}
         
