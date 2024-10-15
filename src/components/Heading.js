@@ -1,12 +1,13 @@
 import React from 'react';
-import { FaPlus } from 'react-icons/fa'; // Ícono de Plus
+import { FaPlus } from 'react-icons/fa'; 
 import "./Heading.css";
 import Dropdown from './Dropdown';
 import DropdownItem from './DropDownItem';
 
-function Heading({ onAddNote, onLogout }) {
+function Heading({ onAddNote, onLogout, onViewModeChange }) {
   const handleDropdownItemClick = (mode) => {
     console.log(`Modo cambiado a: ${mode}`);
+    onViewModeChange(mode);
   };
 
   return (
@@ -23,13 +24,13 @@ function Heading({ onAddNote, onLogout }) {
             const newNote = { title: '', content: '' };
             onAddNote(newNote);
           }}
-          title="Nueva Nota"  // Tooltip al pasar el mouse
+          title="Nueva Nota"  
         >
-          <FaPlus /> {/* Solo el ícono "+" */}
+          <FaPlus />
         </button>
 
         <button className="heading-mode-button">Cambiar Modo</button>
-        
+
         <div className="dropdown-container">
           <Dropdown
             buttonText={<span className="icon">☰</span>}

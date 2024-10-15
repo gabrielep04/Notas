@@ -3,6 +3,8 @@ import Sidebar from './components/Sidebar';
 import NoteViewer from './components/NoteViewer';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import Heading from './components/Heading';
+import GalleryView from './components/GalleryView';
 import './App.css';
 
 function App() {
@@ -10,6 +12,7 @@ function App() {
   const [activeNote, setActiveNote] = useState(null); // La nota seleccionada
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticación
   const [isRegistering, setIsRegistering] = useState(false); //Estado de registro
+  const [viewMode, setViewMode] = useState('list'); // Estado del modo de vista
 
   // Función para agregar una nota
   const addNote = async (note) => {
@@ -73,15 +76,20 @@ function App() {
     //Manejar registro de usuario
     const handleRegisterSuccess = () => {
       setIsRegistering(false);
-    }
+    };
     
     const handleToggleRegister = () => {
       setIsRegistering(!isRegistering);
-    }
+    };
 
-    //Verificar si hay un token
+    // Manejar cambio de modo de vista
+    const handleViewModeChange = (mode) => {
+      setViewMode(mode);
+    };
+
+    // Verificar si hay un token
     useEffect(() => {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       if (token) {
         setIsAuthenticated(true);
         handleLoginSuccess();
@@ -97,22 +105,30 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* Si el usuario está autenticado, mostramos la app de notas */}
-      {isAuthenticated ? (
-        <>
-          <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onAddNote={addNote} onDeleteNote={deleteNote} onLogout={handleLogout} />
-          <NoteViewer note={activeNote} onSave={updateNote} onDelete={deleteNote} />
-        </>
+    {isAuthenticated ? (
+      <>
+        <Heading onAddNote={addNote} onLogout={handleLogout} onViewModeChange={handleViewModeChange} />
+        {viewMode === 'list' && (
+          <>
+            <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onAddNote={addNote} onDeleteNote={deleteNote} onLogout={handleLogout} />
+            <NoteViewer note={activeNote} onSave={updateNote} onDelete={deleteNote} />
+          </>
+        )}
+        {viewMode === 'gallery' && (
+          <>
+            <GalleryView notes={notes} onSelectNote={setActiveNote} />
+          </>
+        )}
+      </>
+    ) : (
+      isRegistering ? (
+        <RegisterForm onToggleRegister={handleToggleRegister} onRegisterSuccess={handleRegisterSuccess} />
       ) : (
-        // Si no está autenticado, mostramos la pantalla de login o registro
-        isRegistering ? (
-          <RegisterForm onToggleRegister={handleToggleRegister} onRegisterSuccess={handleRegisterSuccess} />
-        ) : (
-          <LoginForm onLoginSuccess={handleLoginSuccess} onToggleRegister={handleToggleRegister} />
-        )
-      )}
-    </div>
-  );
+        <LoginForm onLoginSuccess={handleLoginSuccess} onToggleRegister={handleToggleRegister} />
+      )
+    )}
+  </div>
+);
 }
 
 export default App;

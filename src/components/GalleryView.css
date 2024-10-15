@@ -1,0 +1,41 @@
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Máximo 4 columnas */
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .gallery-item {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    padding: 10px;
+  }
+  
+  .gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .gallery-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 8px;
+  }
+  
+  .gallery-content {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 8px;
+  }
+  
+  .gallery-date {
+    font-size: 0.85rem;
+    color: #999;
+    text-align: right;
+  }
+  

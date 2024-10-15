@@ -7,6 +7,7 @@ body {
 .app-container {
   display: flex;
   height: 100vh;
+  position: relative;
 }
 
 .sidebar {
@@ -43,11 +44,6 @@ body {
   flex-direction: column;
 }
 
-.message-viewer{
-  margin-left: 360px;
-  margin-top: 300px;
-}
-
 .note-viewer h2 {
   margin-top: 0;
 }
@@ -72,4 +68,35 @@ input, textarea {
 textarea {
   height: 200px;
   resize: none;
+}
+
+.heading {
+  position: absolute; 
+  top: 10px; 
+  left: 25px; 
+  background-color: #ffffff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  padding: 10px; 
+  z-index: 10; 
+  width: 330px;
+}
+
+.heading-top {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+}
+
+.button-container {
+  display: flex; 
+  align-items: center; 
+}
+
+.heading-title {
+  margin: 0; 
+}
+
+.heading-add-button, .heading-logout-button {
+  margin-left: 10px; 
+  cursor: pointer;
 }

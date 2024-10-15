@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css'; 
 import { FaTrashAlt } from 'react-icons/fa';
-import Heading from "./Heading";
 
 function Sidebar({ notes, activeNote, onSelectNote, onAddNote, onDeleteNote, onLogout }) {
   const [hoveredIndex, setHoveredIndex] = useState(null); 
@@ -42,20 +41,20 @@ function Sidebar({ notes, activeNote, onSelectNote, onAddNote, onDeleteNote, onL
       onDeleteNote(activeNote.id);
     }
     onSelectNote(note);
-  }
+  };
 
   const truncateTitle = (title) => {
     if (title.length > 15) {
       return title.substring(0, 15) + "...";
     }
     return title;
-  }
+  };
 
   const sortedNotes = [...notes].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
   return (
     <div className="sidebar">
-      <Heading onAddNote={onAddNote} onLogout={onLogout} />
+      <button className='note-margin'></button>
       <ul className="notes-list">
         {sortedNotes.map((note, index) => (
           <li 
