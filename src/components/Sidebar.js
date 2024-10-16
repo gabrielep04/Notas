@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Sidebar.css'; 
 import { FaTrashAlt } from 'react-icons/fa';
 
-function Sidebar({ notes, activeNote, onSelectNote, onAddNote, onDeleteNote, onLogout }) {
+function Sidebar({ notes, activeNote, onSelectNote, onDeleteNote }) {
   const [hoveredIndex, setHoveredIndex] = useState(null); 
 
   useEffect(() => {

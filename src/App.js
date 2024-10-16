@@ -5,14 +5,18 @@ import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import Heading from './components/Heading';
 import GalleryView from './components/GalleryView';
+import NotePopup from './components/NotePopUp';
 import './App.css';
 
 function App() {
-  const [notes, setNotes] = useState([]);  // Estado para las notas
+  const [notes, setNotes] = useState([]); // Estado para las notas
   const [activeNote, setActiveNote] = useState(null); // La nota seleccionada
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticación
   const [isRegistering, setIsRegistering] = useState(false); //Estado de registro
   const [viewMode, setViewMode] = useState('list'); // Estado del modo de vista
+  const [selectedNote, setSelectedNote] = useState(null); // Estado para la nota seleccionada en el popup
+  const [isPopupOpen, setIsPopupOpen] = useState(false);  // Estado para controlar si el popup está abierto
+
 
   // Función para agregar una nota
   const addNote = async (note) => {
@@ -28,6 +32,13 @@ function App() {
     const newNote = await response.json();
     setNotes([...notes, newNote]);
     setActiveNote(newNote);
+
+    if (viewMode === 'list') {
+      setActiveNote(newNote); // Abrir en NoteViewer si está en modo lista
+    } else if (viewMode === 'gallery') {
+      setSelectedNote(newNote); // Abrir en Popup si está en modo galería
+      setIsPopupOpen(true);
+    }
   };
 
   // Función para eliminar una nota
@@ -40,7 +51,7 @@ function App() {
       },
     });
     setNotes(notes.filter((note) => note.id !== id));
-    setActiveNote(null); // Si borramos la nota activa, deseleccionarla
+    setActiveNote(null);
   };
 
   // Función para actualizar una nota
@@ -59,49 +70,49 @@ function App() {
     setActiveNote(updated);
   };
 
-    // Manejar autenticación
-    const handleLoginSuccess = async () => {
-      setIsAuthenticated(true); // Cambia el estado a autenticado
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/notes', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const fetchedNotes = await response.json();
-      setNotes(fetchedNotes);
-      setActiveNote(null);
-    };
+  // Manejar autenticación
+  const handleLoginSuccess = async () => {
+    setIsAuthenticated(true);
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://localhost:5000/notes', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const fetchedNotes = await response.json();
+    setNotes(fetchedNotes);
+    setActiveNote(null);
+  };
 
-    //Manejar registro de usuario
-    const handleRegisterSuccess = () => {
-      setIsRegistering(false);
-    };
-    
-    const handleToggleRegister = () => {
-      setIsRegistering(!isRegistering);
-    };
+  //Manejar registro de usuario
+  const handleRegisterSuccess = () => {
+    setIsRegistering(false);
+  };
 
-    // Manejar cambio de modo de vista
-    const handleViewModeChange = (mode) => {
-      setViewMode(mode);
-    };
+  const handleToggleRegister = () => {
+    setIsRegistering(!isRegistering);
+  };
 
-    // Verificar si hay un token
-    useEffect(() => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        setIsAuthenticated(true);
-        handleLoginSuccess();
-      }
-    }, []);
+  // Manejar cambio de modo de vista
+  const handleViewModeChange = (mode) => {
+    setViewMode(mode);
+  };
 
-    const handleLogout = () => {
-      localStorage.removeItem("token");
-      setIsAuthenticated(false);
-      setNotes([]);
-      setActiveNote(null);
-    };
+  // Verificar si hay un token
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+      handleLoginSuccess();
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    setNotes([]);
+    setActiveNote(null);
+  };
 
   return (
     <div className="app-container">
@@ -110,14 +121,23 @@ function App() {
         <Heading onAddNote={addNote} onLogout={handleLogout} onViewModeChange={handleViewModeChange} />
         {viewMode === 'list' && (
           <>
-            <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onAddNote={addNote} onDeleteNote={deleteNote} onLogout={handleLogout} />
+            <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onDeleteNote={deleteNote} />
             <NoteViewer note={activeNote} onSave={updateNote} onDelete={deleteNote} />
           </>
         )}
         {viewMode === 'gallery' && (
           <>
-            <GalleryView notes={notes} onSelectNote={setActiveNote} />
+            <GalleryView notes={notes} onSave={updateNote} onSelectNote={setActiveNote} />
           </>
+        )}
+
+        {/* Renderizar el popup si está en modo galería y abierto */}
+        {isPopupOpen && viewMode === 'gallery' && (
+          <NotePopup 
+            note={selectedNote}   
+            onSave={updateNote}    
+            onClose={() => setIsPopupOpen(false)}  
+          />
         )}
       </>
     ) : (

@@ -4,7 +4,7 @@ import NotePopup from './NotePopUp';
 
 const colors = ['color-1', 'color-2', 'color-3', 'color-4'];
 
-const GalleryView = ({ notes, onSave }) => {
+const GalleryView = ({ notes, onSave, onSelectNote }) => {
   const sortedNotes = [...notes].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
   const formatRelativeDate = (updatedDate) => {
@@ -29,26 +29,24 @@ const GalleryView = ({ notes, onSave }) => {
     }
   };
 
-  // Estados para manejar el popup
   const [selectedNote, setSelectedNote] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  // Función para abrir el popup
   const handleOpenPopup = (note) => {
     setSelectedNote(note);
     setIsPopupOpen(true);
   };
 
-  // Función para cerrar el popup
   const handleClosePopup = () => {
     setIsPopupOpen(false);
     setSelectedNote(null);
   };
 
-  // Función para guardar la nota
-  const handleSaveNote = (note) => {
-    onSave(note); // Guarda la nota
-    handleClosePopup(); // Cierra el popup después de guardar
+  const truncateTitle = (title) => {
+    if (title.length > 40) {
+      return title.substring(0, 40) + "...";
+    }
+    return title;
   };
 
   return (
@@ -58,20 +56,19 @@ const GalleryView = ({ notes, onSave }) => {
           <div
             key={note.id}
             className={`gallery-item ${colors[index % colors.length]}`}
-            onClick={() => handleOpenPopup(note)} // Al hacer clic en la nota, abre el popup
+            onClick={() => handleOpenPopup(note)}
           >
-            <div className="gallery-title">{note.title || 'Sin título'}</div>
+            <div className="gallery-title">{truncateTitle(note.title) || 'Sin título'}</div>
             <div className="gallery-content">{note.content}</div>
             <div className="gallery-date">{formatRelativeDate(note.updated_at)}</div>
           </div>
         ))}
       </div>
 
-      {/* Popup para crear o editar notas */}
       {isPopupOpen && (
         <NotePopup 
           note={selectedNote} 
-          onSave={handleSaveNote} 
+          onSave={onSave} 
           onClose={handleClosePopup}
         />
       )}

@@ -22,7 +22,7 @@ function Heading({ onAddNote, onLogout, onViewModeChange }) {
           className="heading-add-button" 
           onClick={() => {
             const newNote = { title: '', content: '' };
-            onAddNote(newNote);
+            onAddNote(newNote); // Crear nueva nota
           }}
           title="Nueva Nota"  
         >

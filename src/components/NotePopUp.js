@@ -14,7 +14,7 @@ function NotePopup({ note, onSave, onClose }) {
     const updatedNote = { ...currentNote, [field]: value, updated_at: new Date() };
     setCurrentNote(updatedNote);
     if (onSave) {
-      onSave(updatedNote); // Guarda automáticamente cuando se modifica el contenido
+      onSave(updatedNote);
     }
   };
 
@@ -29,7 +29,7 @@ function NotePopup({ note, onSave, onClose }) {
           placeholder="Escribe el título aquí"
         />
         <textarea
-          className="popup-textarea" // Cambia la clase a "popup-textarea"
+          className="popup-textarea"
           value={currentNote.content}
           onChange={(e) => handleContentChange('content', e.target.value)}
           placeholder="Escribe la nota aquí"
