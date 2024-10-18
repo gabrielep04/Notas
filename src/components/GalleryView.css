@@ -113,3 +113,31 @@
   background-color: #121212; 
 }
 
+.dark .color-1 {
+  background-color: #2c3e50; 
+}
+
+.dark .color-2 {
+  background-color: #34495e; 
+}
+
+.dark .color-3 {
+  background-color: #2e4053; 
+}
+
+.dark .color-4 {
+  background-color: #3b3e42; 
+}
+
+.dark .gallery-title {
+  color: #ffffff; 
+}
+
+.dark .gallery-content {
+  color: #b0bec5; 
+}
+
+.dark .gallery-date {
+  color: #757575; 
+}
+

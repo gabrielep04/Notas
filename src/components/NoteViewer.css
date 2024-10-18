@@ -62,6 +62,14 @@
     position: absolute;
     top: 300px;
     left: 730px;
+    background-color: rgba(255, 255, 255, 0.601);
+    border-radius: 8px;
+    height: 30px;
+    padding: 4px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Modo oscuro */
@@ -83,4 +91,10 @@
 
 .dark .trash-icon {
     color: #ff5c5c; 
+}
+
+.dark .message-viewer {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.61);
+    border-radius: 8px;
 }

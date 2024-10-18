@@ -17,7 +17,7 @@ function Switch({ onToggle }) {
   };
 
   return (
-    <label className="apple-switch">
+    <label className="apple-switch" title="Modo claro/oscuro">
       <input type="checkbox" checked={isChecked} onChange={handleToggle} />
       <span className="slider"></span>
     </label>

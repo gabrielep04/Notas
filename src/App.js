@@ -6,6 +6,7 @@ import RegisterForm from './components/RegisterForm';
 import Heading from './components/Heading';
 import GalleryView from './components/GalleryView';
 import NotePopup from './components/NotePopUp';
+import ParticlesBg from 'particles-bg';
 import './App.css';
 
 function App() {
@@ -135,6 +136,7 @@ function App() {
 
   return (
     <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
+      <ParticlesBg type="circle" bg={true}/>
     {isAuthenticated ? (
       <>
         <Heading onAddNote={addNote} onLogout={handleLogout} onViewModeChange={handleViewModeChange} onToggleDarkMode={handleToggleDarkMode} />
