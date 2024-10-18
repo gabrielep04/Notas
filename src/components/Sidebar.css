@@ -7,6 +7,12 @@
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
+/* Modo oscuro */
+.dark-mode .sidebar {
+  background-color: #1c1c1e; 
+  color: #ffffff; 
+}
+
 .note-margin {
   height: 60px;
   width: 100%;
@@ -14,7 +20,12 @@
 }
 
 .sidebar button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; 
+}
+
+/* Modo oscuro para el botón */
+.dark-mode .sidebar button:hover {
+  background-color: #0066cc; 
 }
 
 .sidebar ul {
@@ -26,7 +37,7 @@
 .list-group-item {
   padding: 10px;
   margin-bottom: 10px;
-  background-color: white;
+  background-color: white; 
   border-radius: 4px;
   cursor: pointer;
   display: flex;
@@ -35,19 +46,40 @@
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
+/* Modo oscuro para el item de lista */
+.dark-mode .list-group-item {
+  background-color: #2c2c2e; 
+  color: #ffffff;
+}
+
 .list-group-item.active {
-  background-color: #007bff;
+  background-color: #007bff; 
   color: white;
   transform: scale(1.02);
 }
 
+/* Modo oscuro para el item activo */
+.dark-mode .list-group-item.active {
+  background-color: #0056b3; 
+}
+
 .list-group-item:hover {
-  background-color: #f1f1f1;
+  background-color: #f1f1f1; 
+}
+
+/* Modo oscuro para el hover */
+.dark-mode .list-group-item:hover {
+  background-color: #444; 
 }
 
 .note-date {
   font-size: 12px;
   color: #666;
+}
+
+/* Modo oscuro para la fecha de la nota */
+.dark-mode .note-date {
+  color: #aaa; 
 }
 
 .trash-icon {
@@ -63,4 +95,65 @@
 
 .note-list {
   transition: all 0.3s ease;
+}
+
+/* ===== Estilos para el modo compacto ===== */
+.compact-mode .list-group-item {
+  padding: 5px;
+  margin-bottom: 5px;
+  background-color: white; 
+  border-radius: 8px; 
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  font-size: 14px; 
+}
+
+/* Modo oscuro para el item de lista en modo compacto */
+.dark-mode .compact-mode .list-group-item {
+  background-color: #2c2c2e; 
+  color: #ffffff; 
+}
+
+.compact-mode .list-group-item.active {
+  background-color: #007bff; 
+  color: white;
+  transform: scale(1.02);
+}
+
+/* Modo oscuro para el item activo en modo compacto */
+.dark-mode .compact-mode .list-group-item.active {
+  background-color: #0056b3; 
+}
+
+.compact-mode .list-group-item:hover {
+  background-color: #f1f1f1; 
+}
+
+/* Modo oscuro para el hover en modo compacto */
+.dark-mode .compact-mode .list-group-item:hover {
+  background-color: #444; 
+}
+
+.compact-mode .note-date {
+  font-size: 10px; 
+  color: #999;
+}
+
+/* Modo oscuro para la fecha de la nota en modo compacto */
+.dark-mode .compact-mode .note-date {
+  color: #aaa; 
+}
+
+.compact-mode .trash-icon {
+  font-size: 0.9em; 
+  opacity: 1; 
+  margin-left: 5px;
+  color: red;
+}
+
+.compact-mode .list-group-item:hover .trash-icon {
+  opacity: 1;
 }

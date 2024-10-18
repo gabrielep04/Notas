@@ -7,7 +7,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     max-width: 100%;
     margin: 0 auto;
-  }
+}
   
 .note-viewer input[type="text"] {
     border: none;
@@ -22,7 +22,6 @@
   
 .note-viewer input[type="text"]:focus {
     border-color: #0056b3;
-    outline: none;
 }
   
 .note-viewer textarea {
@@ -32,14 +31,13 @@
     line-height: 1.5;
     padding: 15px 5px;
     width: 100%;
-    height: calc(100vh - 200px); /* Ajustar la altura según el tamaño de la pantalla */
+    height: calc(100vh - 200px);
     resize: none;
     transition: border-color 0.3s ease;
 }
   
 .note-viewer textarea:focus {
     border-color: #007bff;
-    outline: none;
 }
 
 .note-footer {
@@ -54,14 +52,35 @@
     margin: 0;
 }
 
-.trash-icon-viewer {
+.trash-icon {
     font-size: 1.5em;
     color: red;
     cursor: pointer;
 }
 
-.message-viewer{
+.message-viewer {
     position: absolute;
     top: 300px;
     left: 730px;
+}
+
+/* Modo oscuro */
+.dark .note-viewer {
+    background-color: #444;
+    color: #fff;
+}
+
+.dark .note-viewer input[type="text"],
+.dark .note-viewer textarea {
+    border-bottom-color: #007bff;
+    color: #fff;
+    background-color: #555;
+}
+
+.dark .note-footer p {
+    color: #bbb;
+}
+
+.dark .trash-icon {
+    color: #ff5c5c; 
 }

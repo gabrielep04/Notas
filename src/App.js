@@ -16,6 +16,7 @@ function App() {
   const [viewMode, setViewMode] = useState('list'); // Estado del modo de vista
   const [selectedNote, setSelectedNote] = useState(null); // Estado para la nota seleccionada en el popup
   const [isPopupOpen, setIsPopupOpen] = useState(false);  // Estado para controlar si el popup está abierto
+  const [isDarkMode, setIsDarkMode] = useState(false); //Estado para el modo oscuro
 
 
   // Función para agregar una nota
@@ -114,20 +115,50 @@ function App() {
     setActiveNote(null);
   };
 
+  const handleToggleDarkMode = (isDark) => {
+    setIsDarkMode(isDark);
+    localStorage.setItem('isDarkMode', isDark);  // Guardar en localStorage
+  };
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark');  
+    } else {
+      document.body.classList.remove('dark'); 
+    }
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('isDarkMode') === 'true';
+    setIsDarkMode(savedDarkMode);
+  }, []);
+
   return (
-    <div className="app-container">
+    <div className={`app-container ${isDarkMode ? 'dark-mode' : ''}`}>
     {isAuthenticated ? (
       <>
-        <Heading onAddNote={addNote} onLogout={handleLogout} onViewModeChange={handleViewModeChange} />
-        {viewMode === 'list' && (
-          <>
-            <Sidebar notes={notes} activeNote={activeNote} onSelectNote={setActiveNote} onDeleteNote={deleteNote} />
-            <NoteViewer note={activeNote} onSave={updateNote} onDelete={deleteNote} />
-          </>
-        )}
+        <Heading onAddNote={addNote} onLogout={handleLogout} onViewModeChange={handleViewModeChange} onToggleDarkMode={handleToggleDarkMode} />
+        {viewMode === 'list' || viewMode === 'compact' ? (
+            <>
+              <Sidebar
+                notes={notes}
+                activeNote={activeNote}
+                onSelectNote={setActiveNote}
+                onDeleteNote={deleteNote}
+                viewMode={viewMode} 
+              />
+              <NoteViewer
+                note={activeNote}
+                onSave={updateNote}
+                onDelete={deleteNote}
+                viewMode={viewMode} 
+              />
+            </>
+          ) : null}
+
         {viewMode === 'gallery' && (
           <>
-            <GalleryView notes={notes} onSave={updateNote} onSelectNote={setActiveNote} />
+            <GalleryView notes={notes} onSave={updateNote} onSelectNote={setActiveNote} onDeleteNote={deleteNote}/>
           </>
         )}
 
@@ -135,7 +166,11 @@ function App() {
         {isPopupOpen && viewMode === 'gallery' && (
           <NotePopup 
             note={selectedNote}   
-            onSave={updateNote}    
+            onSave={updateNote}
+            onDeleteNote={(id) => {
+              console.log('deleteNote called with id:', id); // Debug
+              deleteNote(id);
+            }}
             onClose={() => setIsPopupOpen(false)}  
           />
         )}

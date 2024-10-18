@@ -50,7 +50,7 @@ function NoteViewer({ note, onSave, onDelete }) {
         value={currentNote.title}
         onChange={(e) => handleContentChange('title', e.target.value)}
         placeholder="Escribe el título aquí"
-        maxLength={240}
+        maxLength={50}
       />
       <textarea
       className="note-content"

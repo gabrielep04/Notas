@@ -3,10 +3,10 @@ import { FaPlus } from 'react-icons/fa';
 import "./Heading.css";
 import Dropdown from './Dropdown';
 import DropdownItem from './DropDownItem';
+import Switch from './Switch';
 
-function Heading({ onAddNote, onLogout, onViewModeChange }) {
+function Heading({ onAddNote, onLogout, onViewModeChange, onToggleDarkMode }) {
   const handleDropdownItemClick = (mode) => {
-    console.log(`Modo cambiado a: ${mode}`);
     onViewModeChange(mode);
   };
 
@@ -29,7 +29,7 @@ function Heading({ onAddNote, onLogout, onViewModeChange }) {
           <FaPlus />
         </button>
 
-        <button className="heading-mode-button">Cambiar Modo</button>
+        <Switch onToggle={onToggleDarkMode} />
 
         <div className="dropdown-container">
           <Dropdown

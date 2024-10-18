@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Sidebar.css'; 
 import { FaTrashAlt } from 'react-icons/fa';
 
-function Sidebar({ notes, activeNote, onSelectNote, onDeleteNote }) {
+function Sidebar({ notes, activeNote, onSelectNote, onDeleteNote, viewMode }) {
   const [hoveredIndex, setHoveredIndex] = useState(null); 
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function Sidebar({ notes, activeNote, onSelectNote, onDeleteNote }) {
   const sortedNotes = [...notes].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${viewMode === 'compact' ? 'compact-mode' : ''}`}>
       <button className='note-margin'></button>
       <ul className="notes-list">
         {sortedNotes.map((note, index) => (

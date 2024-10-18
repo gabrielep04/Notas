@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import './GalleryView.css';
 import NotePopup from './NotePopUp';
+import { FaTrashAlt } from 'react-icons/fa';
 
 const colors = ['color-1', 'color-2', 'color-3', 'color-4'];
 
-const GalleryView = ({ notes, onSave, onSelectNote }) => {
+const GalleryView = ({ notes, onSave, onSelectNote, onDeleteNote }) => {
   const sortedNotes = [...notes].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+  const [selectedNote, setSelectedNote] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const formatRelativeDate = (updatedDate) => {
     const now = new Date();
@@ -28,9 +32,6 @@ const GalleryView = ({ notes, onSave, onSelectNote }) => {
       });
     }
   };
-
-  const [selectedNote, setSelectedNote] = useState(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleOpenPopup = (note) => {
     setSelectedNote(note);
@@ -57,10 +58,23 @@ const GalleryView = ({ notes, onSave, onSelectNote }) => {
             key={note.id}
             className={`gallery-item ${colors[index % colors.length]}`}
             onClick={() => handleOpenPopup(note)}
+            onMouseEnter={() => setHoveredIndex(index)} 
+            onMouseLeave={() => setHoveredIndex(null)}
           >
             <div className="gallery-title">{truncateTitle(note.title) || 'Sin título'}</div>
             <div className="gallery-content">{note.content}</div>
             <div className="gallery-date">{formatRelativeDate(note.updated_at)}</div>
+
+
+            {hoveredIndex === index && (
+              <FaTrashAlt
+                className="trash-icon-gallery" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteNote(note.id); 
+                }}
+              />
+            )}
           </div>
         ))}
       </div>
@@ -70,6 +84,7 @@ const GalleryView = ({ notes, onSave, onSelectNote }) => {
           note={selectedNote} 
           onSave={onSave} 
           onClose={handleClosePopup}
+          onDeleteNote={onDeleteNote}
         />
       )}
     </div>

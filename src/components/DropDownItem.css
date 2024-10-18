@@ -5,9 +5,19 @@
   cursor: pointer;
   transition: background-color 0.2s; 
   z-index: 100;
+  color: #000; 
+}
+
+/* Modo oscuro */
+.dark .dropdown-item {
+  color: #fff; 
 }
 
 .dropdown-item:hover {
   background-color: rgb(240, 249, 255); 
-  z-index: 100;
+}
+
+/* Modo oscuro para el hover */
+.dark .dropdown-item:hover {
+  background-color: #444; 
 }
